@@ -13,7 +13,7 @@ jobs:
     environment: production
     env:
       AWS_REGION: 'us-east-1'
-      TERRAFORM_CLI_PATH: .
+      TERRAFORM_CLI_PATH: '/home/ludicsa/terraform/src/terraform'
 
     defaults:
       run:
