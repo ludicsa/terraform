@@ -20,6 +20,9 @@ jobs:
 
     steps:
 
+    - name: Changing directory
+      run: cd ../../src/terraform 
+
     - name: Checkout
       uses: actions/checkout@v3
 
@@ -35,10 +38,6 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1
 
-    - name: Changing dir
-      run: cd ../../src/terraform 
-
-  
     - name: Terraform Init
       run: terraform init -upgrade
 
