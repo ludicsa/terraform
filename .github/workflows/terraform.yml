@@ -13,11 +13,11 @@ jobs:
     environment: production
     env:
       AWS_REGION: 'us-east-1'
+      TERRAFORM_CLI_PATH: .
 
     defaults:
       run:
         shell: bash
-        working-directory: .
 
     steps:
 
