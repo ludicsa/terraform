@@ -6,9 +6,6 @@ on:
     - master
   pull_request:
 
-env:
-  ROOT_PATH: '../../src/terraform/'
-
 jobs:
   terraform:
     name: 'Terraform'
@@ -39,7 +36,7 @@ jobs:
   
     - name: Terraform Init
       run: terraform init -upgrade
-      working-directory: ${{ '../../src/terraform/' }}
+      working-directory: '../../src/terraform/'
 
     - name: Terraform Format
       run: terraform fmt
@@ -49,7 +46,7 @@ jobs:
 
     - name: Terraform Plan
       run: terraform plan
-      working-directory: ${{ '../../src/terraform/' }}
+      working-directory: '../../src/terraform/'
       
 
     - name: Terraform Apply
