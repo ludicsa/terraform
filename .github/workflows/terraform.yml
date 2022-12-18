@@ -13,7 +13,7 @@ jobs:
     environment: production
     env:
       AWS_REGION: 'us-east-1'
-      key: ${{ secrets.MODULE_SSH_KEY }}
+      GIT_SSH_COMMAND: ${{ secrets.MODULE_SSH_KEY }}
 
     defaults:
       run:
