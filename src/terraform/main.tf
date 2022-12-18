@@ -261,7 +261,7 @@ module "autoscaling-elb" {
   elb_name                  = var.elb_name
   target                    = var.target
   port_http_8080            = var.port_http_8080
-  key_name                  = var.key_name
+
 
 
 }

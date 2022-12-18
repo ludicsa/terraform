@@ -16,13 +16,6 @@ variable "publicsubnet2_cidr" {
 
 }
 
-
-variable "jenkins_name" {
-  default     = "Jenkins Server"
-  description = "Name of the instance"
-
-}
-
 ##ASG & ELB
 variable "desired_capacity" {
   default     = 2
