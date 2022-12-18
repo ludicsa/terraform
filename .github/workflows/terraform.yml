@@ -3,7 +3,7 @@ name: 'Terraform'
 on:
   push:
     branches:
-    - master
+    - main
   pull_request:
 
 jobs:
@@ -19,9 +19,6 @@ jobs:
         shell: bash
 
     steps:
-
-    - name: Changing directory
-      run: cd ../../src/terraform 
 
     - name: Checkout
       uses: actions/checkout@v3
