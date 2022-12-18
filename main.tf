@@ -234,7 +234,7 @@ resource "aws_s3_object" "jar-object" {
 }
 
 module "autoscaling-elb" {
-  source = "git@github.com:ludicsa/autoscaling-elb-module.git"
+  source = "https://github.com/ludicsa/autoscaling-elb-module.git"
 
   instance_ami              = var.instance_ami
   instance_type             = var.instance_type
