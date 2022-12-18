@@ -112,9 +112,3 @@ variable "port_http_8080" {
   description = ""
 
 }
-
-variable "key_name" {
-  default     = "terraform_key"
-  description = ""
-
-}

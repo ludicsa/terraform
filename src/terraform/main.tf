@@ -233,41 +233,6 @@ resource "aws_s3_object" "jar-object" {
 
 }
 
-
-##JENKINS EC2
-#resource "aws_instance" "jenkins_server" {
-#  ami                    = var.instance_ami
-#  subnet_id              = aws_subnet.publicsubnet_2.id
-#  instance_type          = var.instance_type
-#  key_name               = var.key_name
-#  availability_zone      = "us-east-1a"
-#  user_data              = file("/home/ludicsa/infra-aws/jenkins.sh")
-#  vpc_security_group_ids = [aws_security_group.allow_http.id, aws_security_group.allow_ssh.id]
-#
-#  tags = {
-#    Name = var.jenkins_name
-#
-#  }
-#
-#}
-
-##KEYPAIR
-resource "tls_private_key" "rsa_key" {
-  algorithm = "RSA"
-  rsa_bits  = 4096
-}
-
-resource "aws_key_pair" "terraform_key" {
-  key_name   = var.key_name
-  public_key = tls_private_key.rsa_key.public_key_openssh
-}
-
-resource "local_file" "tfkey" {
-  content         = tls_private_key.rsa_key.private_key_pem
-  filename        = "tfkey"
-  file_permission = "400"
-}
-
 module "autoscaling-elb" {
   source = "git@github.com:ludicsa/autoscaling-elb-module.git"
 
