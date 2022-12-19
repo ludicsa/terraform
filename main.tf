@@ -209,30 +209,6 @@ resource "aws_security_group" "elb" {
 }
 
 
-##S3 BUCKET
-resource "aws_s3_bucket" "bucket-s3-final-theme" {
-  bucket = "bucket-s3-final-theme"
-
-  tags = {
-    Name = "S3 Bucket Java Jar"
-  }
-}
-
-resource "aws_s3_bucket_acl" "s3-acl" {
-  bucket = aws_s3_bucket.bucket-s3-final-theme.id
-  acl    = "private"
-}
-
-resource "aws_s3_object" "jar-object" {
-
-  for_each = fileset("/home/ludicsa/artifacts/", "*")
-  bucket   = aws_s3_bucket.bucket-s3-final-theme.id
-  key      = each.value
-  acl      = "private"
-  source   = "/home/ludicsa/artifacts/${each.value}"
-
-}
-
 #module "autoscaling-elb" {
 #  source = "git@github.com:ludicsa/autoscaling-elb-module.git"
 #
