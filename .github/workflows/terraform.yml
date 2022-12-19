@@ -46,6 +46,7 @@ jobs:
       run: terraform validate
 
     - name: Terraform Plan
+      if: github.event_name == 'push'
       run: terraform plan
       
 
