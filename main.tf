@@ -2,7 +2,6 @@ provider "aws" {
   region = "us-east-1"
 }
 
-##VPC
 resource "aws_vpc" "main" {
   cidr_block = "10.10.0.0/16"
 
@@ -12,7 +11,6 @@ resource "aws_vpc" "main" {
 
 }
 
-##SUBNET
 resource "aws_subnet" "publicsubnet_1" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = "10.10.1.0/24"
@@ -56,7 +54,6 @@ resource "aws_subnet" "privatesubnet_2" {
 
 }
 
-##IGW & NGW 
 resource "aws_internet_gateway" "internet_gateway" {
   vpc_id = aws_vpc.main.id
 
@@ -80,7 +77,6 @@ resource "aws_eip" "nat_gateway" {
 
 }
 
-##ROUTE-TABLE
 resource "aws_route_table" "public_route_table" {
   vpc_id = aws_vpc.main.id
 
@@ -107,7 +103,6 @@ resource "aws_route_table" "private_route_table" {
   }
 }
 
-##ROUTE-TABLE ASSOCIATION
 resource "aws_route_table_association" "public_route_table_association_1" {
   subnet_id      = aws_subnet.publicsubnet_1.id
   route_table_id = aws_route_table.public_route_table.id
@@ -128,7 +123,6 @@ resource "aws_route_table_association" "private_route_table_association_2" {
   route_table_id = aws_route_table.private_route_table.id
 }
 
-##SG
 resource "aws_security_group" "allow_ssh" {
   name        = "allow_ssh"
   description = "This SG allows SSH connection"
