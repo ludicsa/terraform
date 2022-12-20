@@ -199,7 +199,7 @@ resource "aws_launch_configuration" "ec2_config" {
   image_id                    = var.instance_ami
   instance_type               = var.instance_type
   associate_public_ip_address = false
-  user_data                   = data.template_cloudinit_config.user_data.rendered
+  user_data                   = file("/home/ludicsa/terraform/docker.sh")
   security_groups             = [aws_security_group.allow_http, aws_security_group.allow_ssh, aws_security_group.elb]
 }
 
@@ -253,20 +253,6 @@ resource "aws_autoscaling_attachment" "asg_attachment" {
   autoscaling_group_name = aws_autoscaling_group.auto_scaling_group.id
   elb                    = aws_elb.elastic-load-balancer.id
 }
-
-
-##data-template
-data "template_cloudinit_config" "user_data" {
-
-  part {
-    content_type = "text/x-shellscript"
-    content      = file("/home/ludicsa/terraform/docker.sh")
-  }
-}
-
-
-
-
 
 
 #module "autoscaling-elb" {
