@@ -203,12 +203,12 @@ resource "aws_launch_configuration" "ec2_config" {
                                 #! /bin/bash
                                 sudo apt-get update -y && sudo apt-get install docker.io -y && sudo apt-get update -y && sudo docker pull ludicsa/myapp && sudo docker run -dit -p 8080:8080 --name application ludicsa/myapp
                                 EOF
-  security_groups             = [aws_security_group.allow_http, aws_security_group.allow_ssh, aws_security_group.elb]
+  security_groups             = [aws_security_group.allow_http.id, aws_security_group.allow_ssh.id, aws_security_group.elb.id]
 }
 
 resource "aws_autoscaling_group" "auto_scaling_group" {
   name                 = "ASG"
-  vpc_zone_identifier  = [aws_subnet.privatesubnet_1, aws_subnet.privatesubnet_2]
+  vpc_zone_identifier  = [aws_subnet.privatesubnet_1.id, aws_subnet.privatesubnet_2.id]
   launch_configuration = aws_launch_configuration.ec2_config.name
 
   desired_capacity          = var.desired_capacity
@@ -226,7 +226,7 @@ resource "aws_autoscaling_group" "auto_scaling_group" {
 
 resource "aws_elb" "elastic-load-balancer" {
   name            = var.elb_name
-  subnets         = [aws_subnet.publicsubnet_1, aws_subnet.publicsubnet_2]
+  subnets         = [aws_subnet.publicsubnet_1.id, aws_subnet.publicsubnet_2.id]
   security_groups = [aws_security_group.elb]
 
   listener {
