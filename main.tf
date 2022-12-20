@@ -200,12 +200,12 @@ resource "aws_launch_configuration" "ec2_config" {
   instance_type               = var.instance_type
   associate_public_ip_address = false
   user_data                   = data.template_cloudinit_config.user_data.rendered
-  security_groups             = [var.allow_http, var.allow_ssh, var.elb]
+  security_groups             = [aws_security_group.allow_http, aws_security_group.allow_ssh, aws_security_group.elb]
 }
 
 resource "aws_autoscaling_group" "auto_scaling_group" {
   name                 = "ASG"
-  vpc_zone_identifier  = [var.privatesubnet_1, var.privatesubnet_2]
+  vpc_zone_identifier  = [aws_subnet.privatesubnet_1, aws_subnet.privatesubnet_2]
   launch_configuration = aws_launch_configuration.ec2_config.name
 
   desired_capacity          = var.desired_capacity
@@ -223,8 +223,8 @@ resource "aws_autoscaling_group" "auto_scaling_group" {
 
 resource "aws_elb" "elastic-load-balancer" {
   name            = var.elb_name
-  subnets         = [var.publicsubnet_1, var.publicsubnet_2]
-  security_groups = [var.elb]
+  subnets         = [aws_subnet.publicsubnet_1, aws_subnet.publicsubnet_2]
+  security_groups = [aws_subnet.elb]
 
   listener {
     instance_port     = var.port_http_8080
