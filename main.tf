@@ -199,7 +199,10 @@ resource "aws_launch_configuration" "ec2_config" {
   image_id                    = var.instance_ami
   instance_type               = var.instance_type
   associate_public_ip_address = false
-  user_data                   = file("/home/ludicsa/scripts/docker.sh")
+  user_data                   = <<EOF
+                                #! /bin/bash
+                                sudo apt-get update -y && sudo apt-get install docker.io -y && sudo apt-get update -y && sudo docker pull ludicsa/myapp && sudo docker run -dit -p 8080:8080 --name application ludicsa/myapp
+                                EOF
   security_groups             = [aws_security_group.allow_http, aws_security_group.allow_ssh, aws_security_group.elb]
 }
 
