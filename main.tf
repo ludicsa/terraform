@@ -199,7 +199,7 @@ resource "aws_launch_configuration" "ec2_config" {
   image_id                    = var.instance_ami
   instance_type               = var.instance_type
   associate_public_ip_address = false
-  user_data                   = file("/home/ludicsa/scripts/docker.sh")
+  user_data                   = file("docker.sh")
   security_groups             = [aws_security_group.allow_http.id, aws_security_group.allow_ssh.id, aws_security_group.elb.id]
 }
 
