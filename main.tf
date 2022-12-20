@@ -224,7 +224,7 @@ resource "aws_autoscaling_group" "auto_scaling_group" {
 resource "aws_elb" "elastic-load-balancer" {
   name            = var.elb_name
   subnets         = [aws_subnet.publicsubnet_1, aws_subnet.publicsubnet_2]
-  security_groups = [aws_subnet.elb]
+  security_groups = [aws_security_group.elb]
 
   listener {
     instance_port     = var.port_http_8080
@@ -260,7 +260,7 @@ data "template_cloudinit_config" "user_data" {
 
   part {
     content_type = "text/x-shellscript"
-    content      = file("/home/ludicsa/autoscaling-elb-module/docker.sh")
+    content      = file("/home/ludicsa/terraform/docker.sh")
   }
 }
 
