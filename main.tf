@@ -194,33 +194,107 @@ resource "aws_security_group" "elb" {
   }
 }
 
+##ASG
+resource "aws_launch_configuration" "ec2_config" {
+  image_id                    = var.instance_ami
+  instance_type               = var.instance_type
+  associate_public_ip_address = false
+  user_data                   = data.template_cloudinit_config.user_data.rendered
+  security_groups             = [var.allow_http, var.allow_ssh, var.elb]
+}
 
-module "autoscaling-elb" {
-  source = "git@github.com:ludicsa/autoscaling-elb-module.git"
+resource "aws_autoscaling_group" "auto_scaling_group" {
+  name                 = "ASG"
+  vpc_zone_identifier  = [var.privatesubnet_1, var.privatesubnet_2]
+  launch_configuration = aws_launch_configuration.ec2_config.name
 
-  instance_ami              = var.instance_ami
-  instance_type             = var.instance_type
-  privatesubnet_1           = aws_subnet.privatesubnet_1.id
-  privatesubnet_2           = aws_subnet.privatesubnet_2.id
   desired_capacity          = var.desired_capacity
   min_size                  = var.min_size
   max_size                  = var.max_size
   health_check_grace_period = var.health_check_grace_period
   health_check_type         = var.health_check_type
-  publicsubnet_1            = aws_subnet.publicsubnet_1.id
-  publicsubnet_2            = aws_subnet.publicsubnet_2.id
-  allow_http                = aws_security_group.allow_http.id
-  allow_ssh                 = aws_security_group.allow_ssh.id
-  elb                       = aws_security_group.elb.id
-  vpc_id                    = aws_vpc.main.id
-  port_http                 = var.port_http
-  protocol_http             = var.protocol_http
-  interval                  = var.interval
-  healthy_threshold         = var.healthy_threshold
-  unhealthy_threshold       = var.unhealthy_threshold
-  timeout                   = var.timeout
-  idle_timeout              = var.idle_timeout
-  elb_name                  = var.elb_name
-  target                    = var.target
-  port_http_8080            = var.port_http_8080
+
+  tag {
+    propagate_at_launch = true
+    key                 = "Name"
+    value               = "Application Server"
+  }
 }
+
+resource "aws_elb" "elastic-load-balancer" {
+  name            = var.elb_name
+  subnets         = [var.publicsubnet_1, var.publicsubnet_2]
+  security_groups = [var.elb]
+
+  listener {
+    instance_port     = var.port_http_8080
+    instance_protocol = var.protocol_http
+    lb_port           = var.port_http
+    lb_protocol       = var.protocol_http
+  }
+
+  health_check {
+    healthy_threshold   = var.healthy_threshold
+    unhealthy_threshold = var.unhealthy_threshold
+    target              = var.target
+    timeout             = var.timeout
+    interval            = var.interval
+  }
+
+  cross_zone_load_balancing = true
+  idle_timeout              = var.idle_timeout
+  tags = {
+    Name = "ELB"
+  }
+
+}
+
+resource "aws_autoscaling_attachment" "asg_attachment" {
+  autoscaling_group_name = aws_autoscaling_group.auto_scaling_group.id
+  elb                    = aws_elb.elastic-load-balancer.id
+}
+
+
+##data-template
+data "template_cloudinit_config" "user_data" {
+
+  part {
+    content_type = "text/x-shellscript"
+    content      = file("/home/ludicsa/autoscaling-elb-module/docker.sh")
+  }
+}
+
+
+
+
+
+
+#module "autoscaling-elb" {
+#  source = "git@github.com:ludicsa/autoscaling-elb-module.git"
+#
+#  instance_ami              = var.instance_ami
+#  instance_type             = var.instance_type
+#  privatesubnet_1           = aws_subnet.privatesubnet_1.id
+#  privatesubnet_2           = aws_subnet.privatesubnet_2.id
+#  desired_capacity          = var.desired_capacity
+#  min_size                  = var.min_size
+#  max_size                  = var.max_size
+#  health_check_grace_period = var.health_check_grace_period
+#  health_check_type         = var.health_check_type
+#  publicsubnet_1            = aws_subnet.publicsubnet_1.id
+#  publicsubnet_2            = aws_subnet.publicsubnet_2.id
+#  allow_http                = aws_security_group.allow_http.id
+#  allow_ssh                 = aws_security_group.allow_ssh.id
+#  elb                       = aws_security_group.elb.id
+#  vpc_id                    = aws_vpc.main.id
+#  port_http                 = var.port_http
+#  protocol_http             = var.protocol_http
+#  interval                  = var.interval
+#  healthy_threshold         = var.healthy_threshold
+#  unhealthy_threshold       = var.unhealthy_threshold
+#  timeout                   = var.timeout
+#  idle_timeout              = var.idle_timeout
+#  elb_name                  = var.elb_name
+#  target                    = var.target
+#  port_http_8080            = var.port_http_8080
+#}
