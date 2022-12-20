@@ -195,35 +195,32 @@ resource "aws_security_group" "elb" {
 }
 
 
-#module "autoscaling-elb" {
-#  source = "git@github.com:ludicsa/autoscaling-elb-module.git"
-#
-#  instance_ami              = var.instance_ami
-#  instance_type             = var.instance_type
-#  privatesubnet_1           = aws_subnet.privatesubnet_1.id
-#  privatesubnet_2           = aws_subnet.privatesubnet_2.id
-#  desired_capacity          = var.desired_capacity
-#  min_size                  = var.min_size
-#  max_size                  = var.max_size
-#  health_check_grace_period = var.health_check_grace_period
-#  health_check_type         = var.health_check_type
-#  publicsubnet_1            = aws_subnet.publicsubnet_1.id
-#  publicsubnet_2            = aws_subnet.publicsubnet_2.id
-#  allow_http                = aws_security_group.allow_http.id
-#  allow_ssh                 = aws_security_group.allow_ssh.id
-#  elb                       = aws_security_group.elb.id
-#  vpc_id                    = aws_vpc.main.id
-#  port_http                 = var.port_http
-#  protocol_http             = var.protocol_http
-#  interval                  = var.interval
-#  healthy_threshold         = var.healthy_threshold
-#  unhealthy_threshold       = var.unhealthy_threshold
-#  timeout                   = var.timeout
-#  idle_timeout              = var.idle_timeout
-#  elb_name                  = var.elb_name
-#  target                    = var.target
-#  port_http_8080            = var.port_http_8080
+module "autoscaling-elb" {
+  source = "git@github.com:ludicsa/autoscaling-elb-module.git"
 
-
-
-#}
+  instance_ami              = var.instance_ami
+  instance_type             = var.instance_type
+  privatesubnet_1           = aws_subnet.privatesubnet_1.id
+  privatesubnet_2           = aws_subnet.privatesubnet_2.id
+  desired_capacity          = var.desired_capacity
+  min_size                  = var.min_size
+  max_size                  = var.max_size
+  health_check_grace_period = var.health_check_grace_period
+  health_check_type         = var.health_check_type
+  publicsubnet_1            = aws_subnet.publicsubnet_1.id
+  publicsubnet_2            = aws_subnet.publicsubnet_2.id
+  allow_http                = aws_security_group.allow_http.id
+  allow_ssh                 = aws_security_group.allow_ssh.id
+  elb                       = aws_security_group.elb.id
+  vpc_id                    = aws_vpc.main.id
+  port_http                 = var.port_http
+  protocol_http             = var.protocol_http
+  interval                  = var.interval
+  healthy_threshold         = var.healthy_threshold
+  unhealthy_threshold       = var.unhealthy_threshold
+  timeout                   = var.timeout
+  idle_timeout              = var.idle_timeout
+  elb_name                  = var.elb_name
+  target                    = var.target
+  port_http_8080            = var.port_http_8080
+}
