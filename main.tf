@@ -227,7 +227,7 @@ resource "aws_autoscaling_group" "auto_scaling_group" {
 resource "aws_elb" "elastic-load-balancer" {
   name            = var.elb_name
   subnets         = [aws_subnet.publicsubnet_1.id, aws_subnet.publicsubnet_2.id]
-  security_groups = [aws_security_group.elb]
+  security_groups = [aws_security_group.elb.id]
 
   listener {
     instance_port     = var.port_http_8080
