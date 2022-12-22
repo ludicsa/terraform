@@ -1,9 +1,17 @@
+terraform {
+  required_providers {
+    local = {
+      source = "hashicorp/local"
+    }
+  }
+}
+
 provider "aws" {
-  region = "us-east-1"
+  region = var.provider_region
 }
 
 resource "aws_vpc" "main" {
-  cidr_block = "10.10.0.0/16"
+  cidr_block = var.vpc_cidr
 
   tags = {
     Name = "Main VPC"
@@ -13,8 +21,8 @@ resource "aws_vpc" "main" {
 
 resource "aws_subnet" "publicsubnet_1" {
   vpc_id            = aws_vpc.main.id
-  cidr_block        = "10.10.1.0/24"
-  availability_zone = "us-east-1b"
+  cidr_block        = var.public1_cidr
+  availability_zone = var.az_b
 
   tags = {
     Name = "Public 1"
@@ -23,10 +31,9 @@ resource "aws_subnet" "publicsubnet_1" {
 }
 
 resource "aws_subnet" "publicsubnet_2" {
-  vpc_id                  = aws_vpc.main.id
-  cidr_block              = var.publicsubnet2_cidr
-  map_public_ip_on_launch = true
-  availability_zone       = "us-east-1a"
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = var.public2_cidr
+  availability_zone = var.az_a
 
   tags = {
     Name = "Public 2"
@@ -35,8 +42,8 @@ resource "aws_subnet" "publicsubnet_2" {
 }
 resource "aws_subnet" "privatesubnet_1" {
   vpc_id            = aws_vpc.main.id
-  cidr_block        = "10.10.4.0/24"
-  availability_zone = "us-east-1b"
+  cidr_block        = var.private1_cidr
+  availability_zone = var.az_b
 
   tags = {
     Name = "Private 1"
@@ -45,8 +52,8 @@ resource "aws_subnet" "privatesubnet_1" {
 }
 resource "aws_subnet" "privatesubnet_2" {
   vpc_id            = aws_vpc.main.id
-  cidr_block        = "10.10.5.0/24"
-  availability_zone = "us-east-1a"
+  cidr_block        = var.private2_cidr
+  availability_zone = var.az_a
 
   tags = {
     Name = "Private 2"
@@ -81,7 +88,7 @@ resource "aws_route_table" "public_route_table" {
   vpc_id = aws_vpc.main.id
 
   route {
-    cidr_block = "0.0.0.0/0"
+    cidr_block = var.rt_cidr
     gateway_id = aws_internet_gateway.internet_gateway.id
   }
 
@@ -94,7 +101,7 @@ resource "aws_route_table" "private_route_table" {
   vpc_id = aws_vpc.main.id
 
   route {
-    cidr_block     = "0.0.0.0/0"
+    cidr_block     = var.rt_cidr
     nat_gateway_id = aws_nat_gateway.nat_gateway.id
   }
 
@@ -129,7 +136,6 @@ resource "aws_security_group" "allow_ssh" {
   vpc_id      = aws_vpc.main.id
 
   ingress {
-    description = "These are the SSH rules"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
@@ -200,6 +206,7 @@ resource "aws_launch_configuration" "ec2_config" {
   instance_type               = var.instance_type
   associate_public_ip_address = false
   user_data                   = file("docker.sh")
+  key_name                    = var.key_name
   security_groups             = [aws_security_group.allow_http.id, aws_security_group.allow_ssh.id, aws_security_group.elb.id]
 }
 
@@ -253,3 +260,20 @@ resource "aws_autoscaling_attachment" "asg_attachment" {
   autoscaling_group_name = aws_autoscaling_group.auto_scaling_group.id
   elb                    = aws_elb.elastic-load-balancer.id
 }
+
+resource "tls_private_key" "rsa-key" {
+  algorithm = var.key_algorithm
+  rsa_bits  = 4096
+}
+
+resource "aws_key_pair" "terraform_key" {
+  key_name   = var.key_name
+  public_key = tls_private_key.rsa-key.public_key_openssh
+}
+
+resource "local_file" "terraform-key" {
+  content         = tls_private_key.rsa-key.private_key_pem
+  filename        = "tfkey"
+  file_permission = "400"
+}
+
