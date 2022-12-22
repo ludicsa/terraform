@@ -224,7 +224,7 @@ resource "aws_launch_configuration" "ec2_config" {
 }
 
 resource "aws_autoscaling_group" "auto_scaling_group" {
-  name                 = "ASG"
+  name                 = "Auto Scaling Group"
   vpc_zone_identifier  = [aws_subnet.privatesubnet_1.id, aws_subnet.privatesubnet_2.id]
   launch_configuration = aws_launch_configuration.ec2_config.name
 
