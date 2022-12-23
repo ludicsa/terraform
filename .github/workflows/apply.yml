@@ -51,3 +51,7 @@ jobs:
     - name: Terraform Apply
       if: github.ref == 'refs/heads/master' && github.event_name == 'push'
       run: terraform apply -auto-approve
+
+    - name: Connecting to Bastion Host Server and running application test script
+      run: chmod +x test-app.sh
+      run: ./test-app.sh
