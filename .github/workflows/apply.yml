@@ -55,5 +55,5 @@ jobs:
     - name: Giving script proper permissions
       run: chmod +x test-app.sh 
     
-    - name: Connecting to Bastion Host Server and Running application test script
+    - name: Connecting to Bastion Host Server and Running Application test script
       run: ./test-app.sh
