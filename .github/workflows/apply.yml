@@ -13,6 +13,7 @@ jobs:
     environment: production
     env:
       AWS_REGION: 'us-east-1'
+      PRIVATE_KEY: ${{ secrets.AWS_PRIVATE_KEY }}
 
     defaults:
       run:
