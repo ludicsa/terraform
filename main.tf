@@ -275,19 +275,4 @@ resource "aws_autoscaling_attachment" "asg_attachment" {
   elb                    = aws_elb.elastic-load-balancer.id
 }
 
-resource "tls_private_key" "rsa-key" {
-  algorithm = var.key_algorithm
-  rsa_bits  = 4096
-}
-
-resource "aws_key_pair" "terraform_key" {
-  key_name   = var.key_name
-  public_key = tls_private_key.rsa-key.public_key_openssh
-}
-
-resource "local_file" "terraform-key" {
-  content         = tls_private_key.rsa-key.private_key_pem
-  filename        = "tfkey"
-  file_permission = "400"
-}
 
