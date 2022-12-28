@@ -1,2 +1,0 @@
-PRIVATE_IP=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=Application Server" --query "Reservations[*].Instances[*].PrivateIpAddress" --output=text)
-curl -s $PRIVATE_IP:8080/actuator/health && curl $PRIVATE_IP:8080/actuator/health 2>/dev/null
