@@ -4,7 +4,13 @@ on:
   push:
     branches:
     - master
+    paths: 
+    - terraform/**
   pull_request:
+    branches:
+    - master
+    paths:
+    - terraform/**
 
 jobs:
   terraform:
@@ -13,7 +19,6 @@ jobs:
     environment: production
     env:
       AWS_REGION: 'us-east-1'
-      PRIVATE_KEY: ${{ secrets.AWS_PRIVATE_KEY }}
 
     defaults:
       run:
@@ -46,15 +51,49 @@ jobs:
       run: terraform validate
 
     - name: Terraform Plan
-      if: github.event_name == 'push'
-      run: terraform plan
+      if: github.event_name == 'pull_request'
+      run: terraform plan -no-color -input=false
+      contiune-on-error: true
       
     - name: Terraform Apply
       if: github.ref == 'refs/heads/master' && github.event_name == 'push'
       run: terraform apply -auto-approve
-
-    - name: Giving script proper permissions
-      run: chmod +x test-app.sh 
     
-    - name: Connecting to Bastion Host Server and Running Application Test script
-      run: ./test-app.sh
+    - uses: actions/github-script@v6
+       if: github.event_name == 'pull_request'
+       env:
+         PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+       with:
+         script: |
+           const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+           #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+           #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
+           #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+ 
+           <details><summary>Show Plan</summary>
+ 
+           \`\`\`\n
+           ${process.env.PLAN}
+           \`\`\`
+ 
+           </details>
+           *Pushed by: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
+ 
+           github.rest.issues.createComment({
+             issue_number: context.issue.number,
+             owner: context.repo.owner,
+             repo: context.repo.repo,
+             body: output
+           })
+
+    - name: Terraform Plan Status
+      if: steps.plan.outcome == 'failure'
+      run: exit 1
+
+    - name: Terraform Apply 
+      if: github.ref == 'refs/head/main' && github.event_name == 'push'
+      run: terraform apply -auto-approve -input=false
+
+
+
+
