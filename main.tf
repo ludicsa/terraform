@@ -265,7 +265,7 @@ resource "aws_elb" "elastic-load-balancer" {
   cross_zone_load_balancing = true
   idle_timeout              = var.idle_timeout
   tags = {
-    Name = "Elastic Load Balancer"
+    Name = "ELB"
   }
 
 }
