@@ -200,21 +200,6 @@ resource "aws_security_group" "elb" {
   }
 }
 
-resource "aws_instance" "bastion_host" {
-  ami                         = var.instance_ami
-  instance_type               = var.instance_type
-  subnet_id                   = aws_subnet.publicsubnet_1.id
-  vpc_security_group_ids      = [aws_security_group.allow_ssh.id]
-  user_data                   = file("aws-cli.sh")
-  key_name                    = var.key_name
-  associate_public_ip_address = true
-
-  tags = {
-    Name = "Bastion Host"
-  }
-
-}
-
 resource "aws_launch_configuration" "ec2_config" {
   image_id                    = var.instance_ami
   instance_type               = var.instance_type
