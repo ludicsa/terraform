@@ -227,7 +227,7 @@ resource "aws_autoscaling_group" "auto_scaling_group" {
   tag {
     propagate_at_launch = true
     key                 = "Name"
-    value               = "Application Server"
+    value               = "Autoscaling Group Server"
   }
 }
 
