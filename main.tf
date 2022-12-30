@@ -205,7 +205,6 @@ resource "aws_launch_configuration" "ec2_config" {
   instance_type               = var.instance_type
   associate_public_ip_address = false
   user_data                   = file("docker.sh")
-  key_name                    = var.key_name
   security_groups             = [aws_security_group.allow_http.id, aws_security_group.allow_ssh.id, aws_security_group.elb.id]
 }
 
