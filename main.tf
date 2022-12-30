@@ -5,7 +5,7 @@ terraform {
     }
   }
   backend "s3" {
-    bucket = "bucket-lucas-ludicsa-final-3"
+    bucket = "bucket-final-theme"
     key    = "terraform.tfstate"
     region = "us-east-1"
   }
