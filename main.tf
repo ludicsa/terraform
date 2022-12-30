@@ -4,6 +4,11 @@ terraform {
       source = "hashicorp/local"
     }
   }
+  backend "s3" {
+    bucket = "bucket-lucas-ludicsa-final"
+    key    = "terraform.tfstate"
+    region = "us-east-1"
+  }
 }
 
 provider "aws" {
