@@ -1,0 +1,14 @@
+{
+  "builds": [
+    {
+      "name": "java",
+      "builder_type": "amazon-ebs",
+      "build_time": 1673886568,
+      "files": null,
+      "artifact_id": "us-east-1:ami-0628b7653edb96c59",
+      "packer_run_uuid": "d97e49fb-669a-413a-240a-68f1e4043460",
+      "custom_data": null
+    }
+  ],
+  "last_run_uuid": "d97e49fb-669a-413a-240a-68f1e4043460"
+}
