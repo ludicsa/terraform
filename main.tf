@@ -5,7 +5,7 @@ terraform {
     }
   }
   backend "s3" {
-    bucket = "s3-backend-final-lucas"
+    bucket = "s3-backend-final-ludicsa"
     key    = "terraform.tfstate"
     region = "us-east-1"
   }
@@ -213,7 +213,7 @@ resource "aws_launch_configuration" "ec2_config" {
 }
 
 resource "aws_autoscaling_group" "auto_scaling_group" {
-  name                 = "ASG"
+  name                 = "Auto Scaling Group"
   vpc_zone_identifier  = [aws_subnet.privatesubnet_1.id, aws_subnet.privatesubnet_2.id]
   launch_configuration = aws_launch_configuration.ec2_config.name
 
@@ -226,7 +226,7 @@ resource "aws_autoscaling_group" "auto_scaling_group" {
   tag {
     propagate_at_launch = true
     key                 = "Name"
-    value               = "App Server"
+    value               = "Application Server"
   }
 }
 
