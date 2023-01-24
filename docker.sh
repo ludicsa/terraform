@@ -1,2 +1,0 @@
-#!/bin/bash
-sudo apt-get update -y && sudo apt-get install docker.io -y && sudo apt-get update -y && sudo docker pull ludicsa/myapp && sudo docker run -dit -p 8080:8080 --name application ludicsa/myapp
