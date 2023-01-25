@@ -210,7 +210,7 @@ resource "aws_launch_configuration" "ec2_config" {
   image_id                    = var.instance_ami
   instance_type               = var.instance_type
   key_name                    = var.key_name
-  user_data                   = ("/home/ludicsa/terraform/packer/user-data.sh")
+  user_data                   = file("/home/ludicsa/terraform/packer/user-data.sh")
   associate_public_ip_address = false
   security_groups             = [aws_security_group.allow_http.id, aws_security_group.allow_ssh.id, aws_security_group.elb.id]
 }
@@ -267,6 +267,16 @@ resource "aws_autoscaling_attachment" "asg_attachment" {
   elb                    = aws_elb.elastic-load-balancer.id
 }
 
+resource "aws_instance" "bastion-host" {
+  ami                    = var.instance_ami
+  instance_type          = "t2.micro"
+  vpc_security_group_ids = [aws_security_group.allow_ssh.id]
+  subnet_id              = aws_subnet.publicsubnet_1.id
+  key_name               = var.key_name
+
+
+}
+
 resource "tls_private_key" "rsa_key" {
   algorithm = "RSA"
   rsa_bits  = 4096
@@ -280,6 +290,6 @@ resource "aws_key_pair" "terraform_key" {
 resource "local_file" "tfkey" {
   content         = tls_private_key.rsa_key.private_key_pem
   filename        = "tfkey"
-  file_permission = "644"
+  file_permission = "400"
 }
 
