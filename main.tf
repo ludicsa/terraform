@@ -215,7 +215,7 @@ resource "aws_launch_configuration" "ec2_config" {
   security_groups             = [aws_security_group.allow_http.id, aws_security_group.allow_ssh.id, aws_security_group.elb.id]
 
   lifecycle {
-    create_before_destroy = true
+    create_before_destroy = false
   }
 }
 
@@ -238,7 +238,7 @@ resource "aws_autoscaling_group" "auto_scaling_group" {
   }
 
   lifecycle {
-    create_before_destroy = true
+    create_before_destroy = false
   }
 }
 
