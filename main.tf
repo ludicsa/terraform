@@ -213,10 +213,6 @@ resource "aws_launch_configuration" "ec2_config" {
   user_data                   = file("./user-data.sh")
   associate_public_ip_address = false
   security_groups             = [aws_security_group.allow_http.id, aws_security_group.allow_ssh.id, aws_security_group.elb.id]
-
-  lifecycle {
-    create_before_destroy = false
-  }
 }
 
 resource "aws_autoscaling_group" "auto_scaling_group" {
@@ -235,10 +231,6 @@ resource "aws_autoscaling_group" "auto_scaling_group" {
     propagate_at_launch = true
     key                 = "Name"
     value               = "App Server"
-  }
-
-  lifecycle {
-    create_before_destroy = false
   }
 }
 
@@ -260,6 +252,16 @@ data "aws_ami" "java_ami" {
     name   = "virtualization-type"
     values = ["hvm"]
   }
+
+  filter {
+    name   = "name"
+    values = ["${var.default_ami[var.ami]["*"]}"]
+  }
+  filter {
+    name   = "image-id"
+    values = ["${var.default_ami[var.ami]["*"]}"]
+  }
+
 }
 
 
