@@ -207,7 +207,7 @@ resource "aws_security_group" "elb" {
 }
 
 resource "aws_launch_configuration" "ec2_config" {
-  ami                         = data.aws_ami.latest.id
+  ami                         = data.aws_ami.java-ami.id
   instance_type               = var.instance_type
   key_name                    = var.key_name
   user_data                   = file("./user-data.sh")
@@ -239,7 +239,7 @@ resource "aws_autoscaling_attachment" "asg_attachment" {
   elb                    = aws_elb.elastic-load-balancer.id
 }
 
-data "aws_ami" "latest" {
+data "aws_ami" "java-ami" {
   most_recent      = true
   executable_users = ["self"]
   owners           = ["self"]
