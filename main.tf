@@ -207,7 +207,7 @@ resource "aws_security_group" "elb" {
 }
 
 resource "aws_launch_configuration" "ec2_config" {
-  image_id                    = data.aws_ami.java_ami.id
+  image_id                    = data.aws_ami.latest.id
   instance_type               = var.instance_type
   key_name                    = var.key_name
   user_data                   = file("./user-data.sh")
@@ -239,9 +239,10 @@ resource "aws_autoscaling_attachment" "asg_attachment" {
   elb                    = aws_elb.elastic-load-balancer.id
 }
 
-data "aws_ami" "java_ami" {
-  most_recent = true
-  owners      = ["self"]
+data "aws_ami" "latest" {
+  most_recent      = true
+  executable_users = ["self"]
+  owners           = ["self"]
 
   filter {
     name   = "root-device-type"
@@ -252,16 +253,6 @@ data "aws_ami" "java_ami" {
     name   = "virtualization-type"
     values = ["hvm"]
   }
-
-  filter {
-    name   = "name"
-    values = ["${var.default_ami[var.ami]["*"]}"]
-  }
-  filter {
-    name   = "image-id"
-    values = ["${var.default_ami[var.ami]["*"]}"]
-  }
-
 }
 
 
