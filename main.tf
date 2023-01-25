@@ -247,6 +247,23 @@ resource "aws_autoscaling_attachment" "asg_attachment" {
   elb                    = aws_elb.elastic-load-balancer.id
 }
 
+data "aws_ami" "java_ami" {
+  most_recent = true
+  owners      = ["self"]
+
+  filter {
+    name   = "root-device-type"
+    values = ["ebs"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+}
+
+
+
 resource "aws_elb" "elastic-load-balancer" {
   name            = var.elb_name
   subnets         = [aws_subnet.publicsubnet_1.id, aws_subnet.publicsubnet_2.id]
@@ -299,9 +316,4 @@ resource "local_file" "tfkey" {
   content         = tls_private_key.rsa_key.private_key_pem
   filename        = "tfkey"
   file_permission = "400"
-}
-
-data "aws_ami" "java_ami" {
-  most_recent = true
-  owners      = ["self"]
 }
