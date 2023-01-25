@@ -240,9 +240,9 @@ resource "aws_autoscaling_attachment" "asg_attachment" {
 }
 
 data "aws_ami" "java-ami" {
-  most_recent    = true
-  owners         = ["self"]
-  image_location = "/home/ludicsa/terraform/packer/manifest.json"
+  most_recent = true
+  owners      = ["402135063963"]
+
 }
 
 
