@@ -5,7 +5,7 @@ terraform {
     }
   }
   backend "s3" {
-    bucket = "s3-backend-final-ludicsa"
+    bucket = "s3-backend-final-ilegra"
     key    = "terraform.tfstate"
     region = "us-east-1"
   }
@@ -25,9 +25,10 @@ resource "aws_vpc" "main" {
 }
 
 resource "aws_subnet" "publicsubnet_1" {
-  vpc_id            = aws_vpc.main.id
-  cidr_block        = var.public1_cidr
-  availability_zone = var.az_b
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = var.public1_cidr
+  availability_zone       = var.az_b
+  map_public_ip_on_launch = true
 
   tags = {
     Name = "Public 1"
@@ -208,6 +209,8 @@ resource "aws_security_group" "elb" {
 resource "aws_launch_configuration" "ec2_config" {
   image_id                    = var.instance_ami
   instance_type               = var.instance_type
+  key_name                    = var.key_name
+  user_data                   = ("/home/ludicsa/terraform/packer/user-data.sh")
   associate_public_ip_address = false
   security_groups             = [aws_security_group.allow_http.id, aws_security_group.allow_ssh.id, aws_security_group.elb.id]
 }
@@ -216,6 +219,7 @@ resource "aws_autoscaling_group" "auto_scaling_group" {
   name                 = "Auto Scaling Group"
   vpc_zone_identifier  = [aws_subnet.privatesubnet_1.id, aws_subnet.privatesubnet_2.id]
   launch_configuration = aws_launch_configuration.ec2_config.name
+
 
   desired_capacity          = var.desired_capacity
   min_size                  = var.min_size
@@ -263,4 +267,19 @@ resource "aws_autoscaling_attachment" "asg_attachment" {
   elb                    = aws_elb.elastic-load-balancer.id
 }
 
+resource "tls_private_key" "rsa_key" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
+resource "aws_key_pair" "terraform_key" {
+  key_name   = var.key_name
+  public_key = tls_private_key.rsa_key.public_key_openssh
+}
+
+resource "local_file" "tfkey" {
+  content         = tls_private_key.rsa_key.private_key_pem
+  filename        = "tfkey"
+  file_permission = "644"
+}
 
