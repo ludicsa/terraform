@@ -207,6 +207,7 @@ resource "aws_security_group" "elb" {
 }
 
 resource "aws_launch_configuration" "ec2_config" {
+  name_prefix                 = "packer-application-java_"
   image_id                    = data.aws_ami.java-ami.id
   instance_type               = var.instance_type
   key_name                    = var.key_name
