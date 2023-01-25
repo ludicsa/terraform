@@ -207,7 +207,7 @@ resource "aws_security_group" "elb" {
 }
 
 resource "aws_launch_configuration" "ec2_config" {
-  image_id                    = var.instance_ami
+  image_id                    = data.aws_ami.java_ami.id
   instance_type               = var.instance_type
   key_name                    = var.key_name
   user_data                   = file("./user-data.sh")
@@ -232,6 +232,11 @@ resource "aws_autoscaling_group" "auto_scaling_group" {
     key                 = "Name"
     value               = "App Server"
   }
+}
+
+resource "aws_autoscaling_attachment" "asg_attachment" {
+  autoscaling_group_name = aws_autoscaling_group.auto_scaling_group.id
+  elb                    = aws_elb.elastic-load-balancer.id
 }
 
 resource "aws_elb" "elastic-load-balancer" {
@@ -262,11 +267,6 @@ resource "aws_elb" "elastic-load-balancer" {
 
 }
 
-resource "aws_autoscaling_attachment" "asg_attachment" {
-  autoscaling_group_name = aws_autoscaling_group.auto_scaling_group.id
-  elb                    = aws_elb.elastic-load-balancer.id
-}
-
 resource "aws_instance" "bastion-host" {
   ami                    = var.instance_ami
   instance_type          = "t2.micro"
@@ -293,3 +293,7 @@ resource "local_file" "tfkey" {
   file_permission = "400"
 }
 
+data "aws_ami" "java_ami" {
+  most_recent = true
+  owners      = ["self"]
+}

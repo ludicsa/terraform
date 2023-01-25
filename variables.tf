@@ -65,9 +65,8 @@ variable "key_algorithm" {
 }
 
 variable "instance_ami" {
-  default     = "ami-06502636b721ace34"
+  default     = "ami-05f9fdacb4f4ec950"
   description = "Instances AMI"
-
 }
 
 variable "instance_type" {
