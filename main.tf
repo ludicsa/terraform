@@ -5,7 +5,7 @@ terraform {
     }
   }
   backend "s3" {
-    bucket = "s3-backend-final-ilegra"
+    bucket = "s3-backend-final-ludicsa"
     key    = "terraform.tfstate"
     region = "us-east-1"
   }
@@ -230,7 +230,7 @@ resource "aws_autoscaling_group" "auto_scaling_group" {
   tag {
     propagate_at_launch = true
     key                 = "Name"
-    value               = "Application Server"
+    value               = "App Server"
   }
 }
 
