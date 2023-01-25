@@ -207,7 +207,7 @@ resource "aws_security_group" "elb" {
 }
 
 resource "aws_launch_configuration" "ec2_config" {
-  ami                         = data.aws_ami.java-ami.id
+  image_id                    = data.aws_ami.java-ami.id
   instance_type               = var.instance_type
   key_name                    = var.key_name
   user_data                   = file("./user-data.sh")
