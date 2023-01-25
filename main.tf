@@ -207,7 +207,6 @@ resource "aws_security_group" "elb" {
 }
 
 resource "aws_launch_configuration" "ec2_config" {
-  name_prefix                 = "packer-application-java_"
   image_id                    = data.aws_ami.java-ami.id
   instance_type               = var.instance_type
   key_name                    = var.key_name
@@ -242,8 +241,12 @@ resource "aws_autoscaling_attachment" "asg_attachment" {
 
 data "aws_ami" "java-ami" {
   most_recent = true
-  name_regex  = "^packer-java-application_*"
   owners      = ["self"]
+
+  filter {
+    name   = "source"
+    values = ["402135063963/packer-application-java"]
+  }
 }
 
 
