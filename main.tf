@@ -241,8 +241,22 @@ resource "aws_autoscaling_attachment" "asg_attachment" {
 
 data "aws_ami" "java-ami" {
   most_recent = true
-  owners      = ["402135063963"]
+  owners      = ["self"]
 
+  filter {
+    name   = "name"
+    values = ["packer-application-*"]
+  }
+
+  filter {
+    name   = "root-device-type"
+    values = ["ebs"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
 }
 
 
