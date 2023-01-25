@@ -213,6 +213,10 @@ resource "aws_launch_configuration" "ec2_config" {
   user_data                   = file("./user-data.sh")
   associate_public_ip_address = false
   security_groups             = [aws_security_group.allow_http.id, aws_security_group.allow_ssh.id, aws_security_group.elb.id]
+
+  lifecycle {
+    create_before_destroy = var.lc_main_create_before_destroy
+  }
 }
 
 resource "aws_autoscaling_group" "auto_scaling_group" {
@@ -231,6 +235,10 @@ resource "aws_autoscaling_group" "auto_scaling_group" {
     propagate_at_launch = true
     key                 = "Name"
     value               = "App Server"
+  }
+
+  lifecycle {
+    create_before_destroy = var.lc_main_create_before_destroy
   }
 }
 
