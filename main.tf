@@ -241,9 +241,9 @@ resource "aws_autoscaling_attachment" "asg_attachment" {
 }
 
 data "aws_ami" "java-ami" {
-  most_recent      = true
-  executable_users = ["self"]
-  owners           = ["self"]
+  most_recent = true
+  name_regex  = "^packer-java-application_*"
+  owners      = ["self"]
 }
 
 
