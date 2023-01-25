@@ -243,16 +243,6 @@ data "aws_ami" "latest" {
   most_recent      = true
   executable_users = ["self"]
   owners           = ["self"]
-
-  filter {
-    name   = "root-device-type"
-    values = ["ebs"]
-  }
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
 }
 
 
