@@ -243,7 +243,7 @@ resource "aws_autoscaling_group" "auto_scaling_group" {
       min_healthy_percentage = 50
       skip_matching          = true
     }
-    #triggers = ["tag"]
+    triggers = ["tag"]
   }
 }
 
