@@ -66,7 +66,7 @@ variable "key_algorithm" {
 
 variable "instance_ami" {
   default     = "ami-00874d747dde814fa"
-  description = "Instances AMI"
+  description = "Bastion AMI"
 }
 
 variable "instance_type" {
