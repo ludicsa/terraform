@@ -241,9 +241,8 @@ resource "aws_autoscaling_group" "auto_scaling_group" {
     strategy = "Rolling"
     preferences {
       min_healthy_percentage = 50
-      skip_matching          = true
+      skip_matching          = false
     }
-    triggers = ["tag"]
   }
 }
 
