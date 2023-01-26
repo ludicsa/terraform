@@ -236,6 +236,14 @@ resource "aws_autoscaling_group" "auto_scaling_group" {
     key                 = "Name"
     value               = "App Server"
   }
+
+  instance_refresh {
+    strategy = "Rolling"
+    preferences {
+      min_healthy_percentage = 50
+    }
+    #triggers = ["tag"]
+  }
 }
 
 resource "aws_autoscaling_attachment" "asg_attachment" {
