@@ -236,9 +236,12 @@ resource "aws_launch_template" "ec2_config" {
 }
 
 resource "aws_autoscaling_group" "auto_scaling_group" {
-  name                 = "Auto Scaling Group"
-  vpc_zone_identifier  = [aws_subnet.privatesubnet_1.id, aws_subnet.privatesubnet_2.id]
-  launch_configuration = aws_launch_template.ec2_config.name
+  name                = "Auto Scaling Group"
+  vpc_zone_identifier = [aws_subnet.privatesubnet_1.id, aws_subnet.privatesubnet_2.id]
+
+  launch_template {
+    id = aws_launch_template.ec2_config.id
+  }
 
 
   desired_capacity          = var.desired_capacity
