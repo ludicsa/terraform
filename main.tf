@@ -242,7 +242,7 @@ resource "aws_autoscaling_group" "auto_scaling_group" {
 
   launch_template {
     name    = aws_launch_template.ec2_config.name
-    version = "$Latest"
+    version = aws_launch_template.ec2_config.latest_version
 
 
 
