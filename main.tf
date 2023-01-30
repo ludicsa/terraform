@@ -220,27 +220,19 @@ resource "aws_security_group" "elb" {
 #}
 
 resource "aws_launch_template" "ec2_config" {
-  iam_instance_profile {
-    image_id = data.aws_ami.java-ami.id
-
-  }
-  instance_market_options {
-    instance_type = var.instance_type
-    key_name      = var.key_name
-  }
-  network_interfaces {
-    associate_public_ip_adress = false
-  }
-  placement {
-    vpc_security_group_ids = [aws_security_group.allow_http.id, aws_security_group.allow_ssh.id, aws_security_group.elb.id]
-  }
-
-  user_data = file("./user-data.sh")
+  image_id               = data.aws_ami.java-ami.id
+  instance_type          = var.instance_type
+  key_name               = var.key_name
+  vpc_security_group_ids = [aws_security_group.allow_http.id, aws_security_group.allow_ssh.id, aws_security_group.elb.id]
+  user_data              = file("./user-data.sh")
 
   lifecycle {
     create_before_destroy = true
   }
 
+  network_interfaces {
+    associate_public_ip_address = false
+  }
 }
 
 resource "aws_autoscaling_group" "auto_scaling_group" {
