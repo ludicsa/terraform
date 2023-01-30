@@ -230,8 +230,8 @@ resource "aws_launch_template" "ec2_config" {
   }
 
   network_interfaces {
-    associate_public_ip_address = false
     security_groups             = [aws_security_group.allow_http.id, aws_security_group.allow_ssh.id, aws_security_group.elb.id]
+    associate_public_ip_address = false
   }
 }
 
@@ -240,7 +240,8 @@ resource "aws_autoscaling_group" "auto_scaling_group" {
   vpc_zone_identifier = [aws_subnet.privatesubnet_1.id, aws_subnet.privatesubnet_2.id]
 
   launch_template {
-    id = aws_launch_template.ec2_config.id
+    id   = aws_launch_template.ec2_config.id
+    name = aws_launch_template.ec2_config.name
 
 
   }
