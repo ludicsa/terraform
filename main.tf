@@ -223,8 +223,7 @@ resource "aws_launch_template" "ec2_config" {
   image_id      = data.aws_ami.java-ami.id
   instance_type = var.instance_type
   key_name      = var.key_name
-  #vpc_security_group_ids = [aws_security_group.allow_http.id, aws_security_group.allow_ssh.id, aws_security_group.elb.id]
-  user_data = filebase64("./user-data.sh")
+  user_data     = filebase64("./user-data.sh")
 
   lifecycle {
     create_before_destroy = true
@@ -242,6 +241,7 @@ resource "aws_autoscaling_group" "auto_scaling_group" {
 
   launch_template {
     id = aws_launch_template.ec2_config.id
+
 
   }
 
