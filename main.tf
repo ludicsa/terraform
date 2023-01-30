@@ -224,7 +224,7 @@ resource "aws_launch_template" "ec2_config" {
   instance_type          = var.instance_type
   key_name               = var.key_name
   vpc_security_group_ids = [aws_security_group.allow_http.id, aws_security_group.allow_ssh.id, aws_security_group.elb.id]
-  user_data              = file("./user-data.sh")
+  user_data              = filebase64("./user-data.sh")
 
   lifecycle {
     create_before_destroy = true
