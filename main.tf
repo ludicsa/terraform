@@ -240,7 +240,6 @@ resource "aws_autoscaling_group" "auto_scaling_group" {
   vpc_zone_identifier = [aws_subnet.privatesubnet_1.id, aws_subnet.privatesubnet_2.id]
 
   launch_template {
-    id   = aws_launch_template.ec2_config.id
     name = aws_launch_template.ec2_config.name
 
 
