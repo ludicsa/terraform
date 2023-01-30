@@ -206,23 +206,47 @@ resource "aws_security_group" "elb" {
   }
 }
 
-resource "aws_launch_configuration" "ec2_config" {
-  image_id                    = data.aws_ami.java-ami.id
-  instance_type               = var.instance_type
-  key_name                    = var.key_name
-  user_data                   = file("./user-data.sh")
-  associate_public_ip_address = false
-  security_groups             = [aws_security_group.allow_http.id, aws_security_group.allow_ssh.id, aws_security_group.elb.id]
+#resource "aws_launch_configuration" "ec2_config" {
+#  image_id                    = data.aws_ami.java-ami.id
+#  instance_type               = var.instance_type
+#  key_name                    = var.key_name
+#  user_data                   = file("./user-data.sh")
+#  associate_public_ip_address = false
+#  security_groups             = [aws_security_group.allow_http.id, aws_security_group.allow_ssh.id, aws_security_group.elb.id]
+#
+#  lifecycle {
+#    create_before_destroy = true
+#  }
+#}
+
+resource "aws_launch_template" "ec2_config" {
+  iam_instance_profile {
+    image_id = data.aws_ami.java-ami.id
+
+  }
+  instance_market_options {
+    instance_type = var.instance_type
+    key_name      = var.key_name
+  }
+  network_interfaces {
+    associate_public_ip_adress = false
+  }
+  placement {
+    vpc_security_group_ids = [aws_security_group.allow_http.id, aws_security_group.allow_ssh.id, aws_security_group.elb.id]
+  }
+
+  user_data = file("./user-data.sh")
 
   lifecycle {
     create_before_destroy = true
   }
+
 }
 
 resource "aws_autoscaling_group" "auto_scaling_group" {
   name                 = "Auto Scaling Group"
   vpc_zone_identifier  = [aws_subnet.privatesubnet_1.id, aws_subnet.privatesubnet_2.id]
-  launch_configuration = aws_launch_configuration.ec2_config.name
+  launch_configuration = aws_launch_template.ec2_config.name
 
 
   desired_capacity          = var.desired_capacity
