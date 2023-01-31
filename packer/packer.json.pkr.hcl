@@ -4,7 +4,7 @@ variable "ami_id" {
 }
 
 locals {
-  app_name = "application-java"
+  app_name = "application-java_v2"
 }
 
 source "amazon-ebs" "java" {
