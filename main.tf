@@ -206,19 +206,6 @@ resource "aws_security_group" "elb" {
   }
 }
 
-#resource "aws_launch_configuration" "ec2_config" {
-#  image_id                    = data.aws_ami.java-ami.id
-#  instance_type               = var.instance_type
-#  key_name                    = var.key_name
-#  user_data                   = file("./user-data.sh")
-#  associate_public_ip_address = false
-#  security_groups             = [aws_security_group.allow_http.id, aws_security_group.allow_ssh.id, aws_security_group.elb.id]
-#
-#  lifecycle {
-#    create_before_destroy = true
-#  }
-#}
-
 resource "aws_launch_template" "ec2_config" {
   image_id               = data.aws_ami.java-ami.id
   instance_type          = var.instance_type
