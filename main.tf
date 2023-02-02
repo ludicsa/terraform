@@ -5,7 +5,7 @@ terraform {
     }
   }
   backend "s3" {
-    bucket = "s3-backend-final-theme"
+    bucket = "s3-backend-final-ilegra"
     key    = "terraform.tfstate"
     region = "us-east-1"
   }
@@ -317,6 +317,7 @@ resource "aws_instance" "bastion-host" {
   vpc_security_group_ids = [aws_security_group.allow_ssh.id]
   subnet_id              = aws_subnet.publicsubnet_1.id
   key_name               = var.key_name
+  iam_instance_profile   = aws_iam_instance_profile.role_profile.id
 
   tags = {
     Name = "Bastion Host"
@@ -369,37 +370,42 @@ resource "local_file" "tfkey" {
 
 
 resource "aws_iam_role" "admin_role" {
-  name = "adm_role"
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Action = "sts:AssumeRole"
-        Effect = "Allow"
-        Sid    = ""
-        Principal = {
-          Service = "ec2.amazonaws.com"
-        }
-      },
-    ]
-  })
+  name               = "adm_role"
+  assume_role_policy = data.aws_iam_policy_document.instance_assume_role_policy.json
+}
+
+data "aws_iam_policy_document" "instance_assume_role_policy" {
+  statement {
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["ec2.amazonaws.com"]
+    }
+  }
 }
 
 resource "aws_iam_policy" "policy" {
-  name = "policy-618033"
+  name        = "test_policy"
+  path        = "/"
+  description = "My test policy"
 
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
       {
-        Action   = ["ec2:Describe*"]
+        Action = [
+          "iam:ListInstanceProfiles",
+          "ec2:Describe*",
+          "ec2:Search*",
+          "ec2:Get*"
+        ]
         Effect   = "Allow"
         Resource = "*"
       },
     ]
   })
 }
-
 resource "aws_iam_role_policy_attachment" "test-attach" {
   role       = aws_iam_role.admin_role.name
   policy_arn = aws_iam_policy.policy.arn
