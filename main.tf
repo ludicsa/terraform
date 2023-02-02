@@ -328,7 +328,7 @@ resource "aws_instance" "bastion-host" {
 
 resource "aws_db_subnet_group" "db-subnet-group" {
   name       = var.db-subnet-group-name
-  subnet_ids = [aws_subnet.privatesubnet_1.id]
+  subnet_ids = [aws_subnet.privatesubnet_1.id, aws_subnet.privatesubnet_2.id]
 
   tags = {
     "Name" = var.db-subnet-group-name
@@ -338,7 +338,7 @@ resource "aws_db_subnet_group" "db-subnet-group" {
 resource "aws_db_instance" "postgres-db" {
   skip_final_snapshot  = true
   multi_az             = true
-  db_subnet_group_name = var.db-subnet-group-name
+  db_subnet_group_name = aws_db_subnet_group.db-subnet-group.name
   allocated_storage    = 10
   engine               = var.db-engine
   engine_version       = var.db-engine-version
