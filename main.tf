@@ -224,18 +224,8 @@ resource "aws_launch_template" "ec2_config" {
 }
 
 resource "aws_autoscaling_group" "auto_scaling_group" {
-  name                = "Auto Scaling Group"
-  vpc_zone_identifier = [aws_subnet.privatesubnet_1.id, aws_subnet.privatesubnet_2.id]
-
-  launch_template {
-    name    = aws_launch_template.ec2_config.name
-    version = aws_launch_template.ec2_config.latest_version
-
-
-
-  }
-
-
+  name                      = "Auto Scaling Group"
+  vpc_zone_identifier       = [aws_subnet.privatesubnet_1.id, aws_subnet.privatesubnet_2.id]
   desired_capacity          = var.desired_capacity
   min_size                  = var.min_size
   max_size                  = var.max_size
@@ -246,6 +236,15 @@ resource "aws_autoscaling_group" "auto_scaling_group" {
     propagate_at_launch = true
     key                 = "Name"
     value               = "App Server"
+  }
+
+
+  launch_template {
+    id      = aws_launch_template.ec2_config.id
+    version = aws_launch_template.ec2_config.latest_version
+
+
+
   }
 
   instance_refresh {
