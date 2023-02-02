@@ -5,7 +5,7 @@ terraform {
     }
   }
   backend "s3" {
-    bucket = "s3-backend-final-ilegra"
+    bucket = "s3-backend-final-theme"
     key    = "terraform.tfstate"
     region = "us-east-1"
   }
@@ -323,6 +323,32 @@ resource "aws_instance" "bastion-host" {
   }
 
 
+}
+
+
+resource "aws_db_subnet_group" "db-subnet-group" {
+  name       = var.db-subnet-group-name
+  subnet_ids = [aws_subnet.privatesubnet1.id]
+
+  tags = {
+    "Name" = var.db-subnet-group-name
+  }
+
+}
+resource "aws_db_instance" "postgres-db" {
+  skip_final_snapshot  = true
+  multi_az             = true
+  db_subnet_group_name = var.db-subnet-group-name
+  allocated_storage    = 10
+  engine               = var.db-engine
+  engine_version       = var.db-engine-version
+  instance_class       = var.db-instance-class
+  db_name              = var.db-name
+  username             = var.db-username
+  port                 = var.db-port
+  password             = var.db-password
+
+  vpc_security_group_ids = [aws_security_group.allow-http.id, aws_security_group.allow-ssh.id]
 }
 
 resource "tls_private_key" "rsa_key" {
