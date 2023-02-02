@@ -319,6 +319,10 @@ resource "aws_instance" "bastion-host" {
   subnet_id              = aws_subnet.publicsubnet_1.id
   key_name               = var.key_name
 
+  tags = {
+    Name = "Bastion Host"
+  }
+
 
 }
 
