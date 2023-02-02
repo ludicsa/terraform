@@ -328,7 +328,7 @@ resource "aws_instance" "bastion-host" {
 
 resource "aws_db_subnet_group" "db-subnet-group" {
   name       = var.db-subnet-group-name
-  subnet_ids = [aws_subnet.privatesubnet1.id]
+  subnet_ids = [aws_subnet.privatesubnet_1.id]
 
   tags = {
     "Name" = var.db-subnet-group-name
@@ -348,7 +348,7 @@ resource "aws_db_instance" "postgres-db" {
   port                 = var.db-port
   password             = var.db-password
 
-  vpc_security_group_ids = [aws_security_group.allow-http.id, aws_security_group.allow-ssh.id]
+  vpc_security_group_ids = [aws_security_group.allow_http.id, aws_security_group.allow_ssh.id]
 }
 
 resource "tls_private_key" "rsa_key" {
