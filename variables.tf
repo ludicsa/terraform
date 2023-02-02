@@ -164,3 +164,59 @@ variable "port_http_8080" {
   description = ""
 
 }
+
+variable "db-subnet-group-name" {
+  type        = string
+  default     = "db-subnet-group"
+  description = ""
+
+}
+
+variable "db-engine-version" {
+  type        = string
+  default     = "13.4"
+  description = ""
+
+}
+
+variable "db-instance-class" {
+  type        = string
+  default     = "db.t3.micro"
+  description = ""
+
+}
+
+
+variable "db-username" {
+  type        = string
+  default     = "root"
+  description = ""
+
+}
+
+variable "db-password" {
+  type        = string
+  default     = "root1234"
+  description = ""
+
+}
+
+variable "db-port" {
+  type    = number
+  default = 5432
+
+}
+
+variable "db-engine" {
+  type        = string
+  default     = "postgres"
+  description = ""
+
+}
+
+variable "db-name" {
+  type        = string
+  default     = "postgresdb"
+  description = ""
+
+}
