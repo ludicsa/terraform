@@ -296,7 +296,16 @@
       "artifact_id": "us-east-1:ami-075f5bd35f57cfe27",
       "packer_run_uuid": "8addd6a1-7f88-bdd4-56fa-a7755c1a4a87",
       "custom_data": null
+    },
+    {
+      "name": "java",
+      "builder_type": "amazon-ebs",
+      "build_time": 1675435056,
+      "files": null,
+      "artifact_id": "us-east-1:ami-0302fe2863934b606",
+      "packer_run_uuid": "207a22e7-860e-3770-b5f6-db1843f7ac50",
+      "custom_data": null
     }
   ],
-  "last_run_uuid": "8addd6a1-7f88-bdd4-56fa-a7755c1a4a87"
+  "last_run_uuid": "207a22e7-860e-3770-b5f6-db1843f7ac50"
 }
