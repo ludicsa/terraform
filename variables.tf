@@ -30,7 +30,19 @@ variable "private1_cidr" {
 
 variable "private2_cidr" {
   default     = "10.10.5.0/24"
-  description = "Private subnet 1 cidr block"
+  description = "Private subnet 2 cidr block"
+
+}
+
+variable "private3_cidr" {
+  default     = "10.10.6.0/24"
+  description = "Private subnet 3 cidr block"
+
+}
+
+variable "private4_cidr" {
+  default     = "10.10.7.0/24"
+  description = "Private subnet 4 cidr block"
 
 }
 
