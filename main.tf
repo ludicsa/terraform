@@ -70,7 +70,7 @@ resource "aws_subnet" "privatesubnet_2" {
 resource "aws_subnet" "privatesubnet_3" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = var.private3_cidr
-  availability_zone = var.az_a
+  availability_zone = var.az_b
 
   tags = {
     Name = "Private 3"
