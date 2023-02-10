@@ -158,6 +158,16 @@ resource "aws_route_table_association" "private_route_table_association_2" {
   route_table_id = aws_route_table.private_route_table.id
 }
 
+resource "aws_route_table_association" "private_route_table_association_3" {
+  subnet_id      = aws_subnet.privatesubnet_3.id
+  route_table_id = aws_route_table.private_route_table.id
+}
+
+resource "aws_route_table_association" "private_route_table_association_4" {
+  subnet_id      = aws_subnet.privatesubnet_4.id
+  route_table_id = aws_route_table.private_route_table.id
+}
+
 resource "aws_security_group" "allow_ssh" {
   name        = "allow_ssh"
   description = "This SG allows SSH connection"
