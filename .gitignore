@@ -5,6 +5,3 @@
 *.tfstate
 *.tfstate.*
 tfkey
-
-#ip 
-ip.txt

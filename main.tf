@@ -67,6 +67,28 @@ resource "aws_subnet" "privatesubnet_2" {
 
 }
 
+resource "aws_subnet" "privatesubnet_3" {
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = var.private3_cidr
+  availability_zone = var.az_a
+
+  tags = {
+    Name = "Private 3"
+  }
+
+}
+
+resource "aws_subnet" "privatesubnet_4" {
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = var.private4_cidr
+  availability_zone = var.az_a
+
+  tags = {
+    Name = "Private 4"
+  }
+
+}
+
 resource "aws_internet_gateway" "internet_gateway" {
   vpc_id = aws_vpc.main.id
 
@@ -317,7 +339,6 @@ resource "aws_instance" "bastion-host" {
   vpc_security_group_ids = [aws_security_group.allow_ssh.id]
   subnet_id              = aws_subnet.publicsubnet_1.id
   key_name               = var.key_name
-  iam_instance_profile   = aws_iam_instance_profile.role_profile.id
 
   tags = {
     Name = "Bastion Host"
@@ -329,7 +350,7 @@ resource "aws_instance" "bastion-host" {
 
 resource "aws_db_subnet_group" "db-subnet-group" {
   name       = var.db-subnet-group-name
-  subnet_ids = [aws_subnet.privatesubnet_1.id, aws_subnet.privatesubnet_2.id]
+  subnet_ids = [aws_subnet.privatesubnet_3.id, aws_subnet.privatesubnet_4.id]
 
   tags = {
     "Name" = var.db-subnet-group-name
@@ -369,49 +390,3 @@ resource "local_file" "tfkey" {
 }
 
 
-resource "aws_iam_role" "admin_role" {
-  name               = "adm_role"
-  assume_role_policy = data.aws_iam_policy_document.instance_assume_role_policy.json
-}
-
-data "aws_iam_policy_document" "instance_assume_role_policy" {
-  statement {
-    actions = ["sts:AssumeRole"]
-
-    principals {
-      type        = "Service"
-      identifiers = ["ec2.amazonaws.com"]
-    }
-  }
-}
-
-resource "aws_iam_policy" "policy" {
-  name        = "test_policy"
-  path        = "/"
-  description = "My test policy"
-
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Action = [
-          "iam:ListInstanceProfiles",
-          "ec2:Describe*",
-          "ec2:Search*",
-          "ec2:Get*"
-        ]
-        Effect   = "Allow"
-        Resource = "*"
-      },
-    ]
-  })
-}
-resource "aws_iam_role_policy_attachment" "test-attach" {
-  role       = aws_iam_role.admin_role.name
-  policy_arn = aws_iam_policy.policy.arn
-}
-
-resource "aws_iam_instance_profile" "role_profile" {
-  name = "role_profile"
-  role = aws_iam_role.admin_role.name
-}
