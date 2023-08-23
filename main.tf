@@ -338,10 +338,6 @@ resource "aws_lb_listener" "alb_listener" {
       status_code  = "200"
       message_body = "OK"
     }
-
-    timeout {
-      idle = var.idle_timeout
-    }
   }
 }
 
