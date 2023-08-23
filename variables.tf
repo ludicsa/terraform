@@ -166,8 +166,8 @@ variable "idle_timeout" {
 
 }
 
-variable "elb_name" {
-  default     = "ELB"
+variable "alb_name" {
+  default     = "ALB"
   description = ""
 }
 
