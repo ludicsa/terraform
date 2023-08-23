@@ -290,7 +290,7 @@ resource "aws_autoscaling_group" "auto_scaling_group" {
 
 resource "aws_autoscaling_attachment" "asg_attachment" {
   autoscaling_group_name = aws_autoscaling_group.auto_scaling_group.id
-  elb                    = aws_lb.application_load_balancer.id
+  alb_target_group_arn   = aws_lb_target_group.target_group.arn
 }
 
 data "aws_ami" "java-ami" {
