@@ -5,7 +5,7 @@ variable "ami_id" {
 
 
 source "amazon-ebs" "java" {
-  ami_name      = "var.ami_name"
+  ami_name      = "packer-application-${timestamp}"
   instance_type = "t2.micro"
   region        = "us-east-1"
   source_ami    = "${var.ami_id}"
