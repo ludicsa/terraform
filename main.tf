@@ -346,6 +346,7 @@ resource "aws_lb_target_group" "target_group" {
   port        = var.port_http_8080
   protocol    = var.protocol_http
   target_type = "instance"
+  vpc_id = aws_vpc.main.id
 
   health_check {
     path = "/actuator/health"
