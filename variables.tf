@@ -130,35 +130,6 @@ variable "protocol_http" {
 
 }
 
-variable "interval" {
-  default     = 10
-  description = ""
-
-}
-
-variable "timeout" {
-  default     = 5
-  description = ""
-
-}
-
-variable "healthy_threshold" {
-  default     = 5
-  description = ""
-
-}
-
-variable "unhealthy_threshold" {
-  default     = 5
-  description = ""
-
-}
-
-variable "target" {
-  default     = "HTTP:8080/actuator/health"
-  description = ""
-
-}
 
 variable "idle_timeout" {
   default     = 40

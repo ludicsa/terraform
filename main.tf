@@ -250,7 +250,7 @@ resource "aws_launch_template" "ec2_config" {
   }
 
   network_interfaces {
-    security_groups             = [aws_security_group.allow_http.id, aws_security_group.allow_ssh.id, aws_security_group.elb.id]
+    security_groups             = [aws_security_group.allow_http.id, aws_security_group.allow_ssh.id, aws_security_group.alb.id]
     associate_public_ip_address = false
   }
 }
@@ -317,7 +317,7 @@ data "aws_ami" "java-ami" {
 resource "aws_lb" "application-load-balancer" {
   name            = var.alb_name
   subnets         = [aws_subnet.publicsubnet_1.id, aws_subnet.publicsubnet_2.id]
-  security_groups = [aws_security_group.security_group_alb.id]
+  security_groups = [aws_security_group.alb.id]
 
   tags = {
     Name = "Application Load Balancer"
@@ -340,7 +340,7 @@ resource "aws_lb_listener" "alb_listener" {
     }
 
     timeout {
-      idle = var.timeout
+      idle = var.idle_timeout
     }
   }
 }
