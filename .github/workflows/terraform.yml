@@ -29,7 +29,7 @@ jobs:
      
 
       - name: Debug - List Parent Directory
-        run: ls -lha ../../terraform/terraform/
+        run: packer build ../../terraform/terraform/packer/packer.json.pkr.hcl
     
 
       - name: Terraform Format
