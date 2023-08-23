@@ -7,6 +7,7 @@ on:
   pull_request:
 
 jobs:
+
   terraform:
     name: "Terraform"
     runs-on: ubuntu-latest
@@ -26,19 +27,13 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-     
-
-      - name: Set up Packer
-        uses: hashicorp/setup-packer@v2.0.0
-
-      - name: Set environment variable
-        run: echo "AMI_NAME=application-java-$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
-
-      
-      - name: Build AMI
-        run:  |
-          packer build ../../terraform/terraform/packer/packer.json.pkr.hcl
     
+
+      - name: Changing to packer directory
+        run: cd ../../terraform/terraform/
+
+      - name: Checking current directory
+        run: ls -lha 
 
       - name: Terraform Format
         id: fmt
