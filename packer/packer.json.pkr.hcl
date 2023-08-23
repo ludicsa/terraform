@@ -21,11 +21,11 @@ build {
   sources = ["source.amazon-ebs.java"]
 
   provisioner "shell" {
-    script = "./java.sh"
+    script = "../../terraform/terraform/packer/java.sh"
   }
 
   provisioner "file" {
-    source      = "/home/ludicsa/terraform/artifacts/myapp.jar"
+    source      = "../../terraform/terraform/artifacts/myapp.jar"
     destination = "/opt/deployment/myapp.jar"
   }
 
