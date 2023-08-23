@@ -319,10 +319,6 @@ resource "aws_lb" "application-load-balancer" {
   subnets         = [aws_subnet.publicsubnet_1.id, aws_subnet.publicsubnet_2.id]
   security_groups = [aws_security_group.security_group_alb.id]
 
-  load_balancer_attributes {
-    idle_timeout.timeout_seconds = var.timeout
-  }
-
   tags = {
     Name = "Application Load Balancer"
   }
@@ -336,6 +332,16 @@ resource "aws_lb_listener" "alb_listener" {
   default_action {
     target_group_arn = aws_lb_target_group.target_group.arn
     type             = "fixed-response"
+
+    fixed_response {
+      content_type = "text/plain"
+      status_code  = "200"
+      message_body = "OK"
+    }
+
+    timeout {
+      idle = var.timeout
+    }
   }
 }
 
