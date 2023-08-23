@@ -29,7 +29,7 @@ jobs:
      
 
       - name: Debug - List Parent Directory
-        run: ls -la ../../terraform/terraform/
+        run: ls -lha ../../terraform/terraform/
     
 
       - name: Terraform Format
