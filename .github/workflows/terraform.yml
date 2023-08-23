@@ -33,7 +33,7 @@ jobs:
         run: cd ../../terraform/terraform/
 
       - name: Checking current directory
-        run: ls -lha 
+        run: ls -la 
 
       - name: Terraform Format
         id: fmt
