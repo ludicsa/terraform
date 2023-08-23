@@ -32,8 +32,8 @@ jobs:
       - name: Changing to packer directory
         run: cd ../../terraform/terraform/packer/
 
-      - name: Checking current directory
-        run: ls -la 
+      - name: Validating packer build
+        run: packer validate packer.json.pkr.hcl
 
       - name: Terraform Format
         id: fmt
