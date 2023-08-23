@@ -28,12 +28,8 @@ jobs:
           aws-region: us-east-1
      
 
-      - name: Set up Packer
-        uses: hashicorp/setup-packer@v2.0.0
-
-      - name: Build AMI
-        run: |
-          packer build ../../packer/packer.json.pkr.hcl
+      - name: Debug - List Parent Directory
+        run: ls -la ../../
     
 
       - name: Terraform Format
