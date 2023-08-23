@@ -30,10 +30,7 @@ jobs:
     
 
       - name: Changing to packer directory
-        run: cd ../../terraform/terraform/packer/packer/
-
-      - name: Listing packer dir
-        run: ls -lha
+        run: ls ../../terraform/terraform/packer/
 
       - name: Terraform Format
         id: fmt
