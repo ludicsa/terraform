@@ -30,7 +30,7 @@ jobs:
     
 
       - name: Changing to packer directory
-        run: cd ../../terraform/terraform/packer/
+        run: cd ../../terraform/terraform/packer/packer/
 
       - name: Listing packer dir
         run: ls -lha
