@@ -186,7 +186,7 @@ variable "db-subnet-group-name" {
 
 variable "db-engine-version" {
   type        = string
-  default     = "13.4"
+  default     = "14.6"
   description = ""
 
 }

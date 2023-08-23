@@ -343,20 +343,6 @@ resource "aws_elb" "elastic-load-balancer" {
 
 }
 
-resource "aws_instance" "bastion-host" {
-  ami                    = var.instance_ami
-  instance_type          = "t2.micro"
-  vpc_security_group_ids = [aws_security_group.allow_ssh.id]
-  subnet_id              = aws_subnet.publicsubnet_1.id
-  key_name               = var.key_name
-
-  tags = {
-    Name = "Bastion"
-  }
-
-
-}
-
 
 resource "aws_db_subnet_group" "db-subnet-group" {
   name       = var.db-subnet-group-name
