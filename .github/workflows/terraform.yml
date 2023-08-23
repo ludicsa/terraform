@@ -30,7 +30,7 @@ jobs:
 
       - name: Build AMI
         run:  |
-          packer build ../../terraform/terraform/packer/packer.json.pkr.hcl
+           packer build -var "ami_name=application-java-$(date +'%Y%m%d%H%M%S')" ../../terraform/terraform/packer/packer.json.pkr.hcl
     
 
       - name: Terraform Format
