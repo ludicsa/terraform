@@ -220,10 +220,10 @@ resource "aws_security_group" "allow_http" {
   }
 }
 
-resource "aws_security_group" "elb" {
-  name        = "security_group_elb"
+resource "aws_security_group" "alb" {
+  name        = "security_group_alb"
   vpc_id      = aws_vpc.main.id
-  description = "elb security group"
+  description = "alb security group"
   egress {
     from_port   = 0
     to_port     = 0
@@ -314,34 +314,72 @@ data "aws_ami" "java-ami" {
 }
 
 
-
-resource "aws_elb" "elastic-load-balancer" {
-  name            = var.elb_name
+resource "aws_lb" "application-load-balancer" {
+  name            = var.alb_name
   subnets         = [aws_subnet.publicsubnet_1.id, aws_subnet.publicsubnet_2.id]
-  security_groups = [aws_security_group.elb.id]
+  security_groups = [aws_security_group.security_group_alb.id]
 
-  listener {
-    instance_port     = var.port_http_8080
-    instance_protocol = var.protocol_http
-    lb_port           = var.port_http
-    lb_protocol       = var.protocol_http
+  load_balancer_attributes {
+    idle_timeout.timeout_seconds = var.timeout
   }
+
+  tags = {
+    Name = "Application Load Balancer"
+  }
+}
+
+resource "aws_lb_listener" "alb_listener" {
+  load_balancer_arn = aws_lb.application-load-balancer.arn
+  port              = var.port_http
+  protocol          = var.protocol_http
+
+  default_action {
+    target_group_arn = aws_lb_target_group.target_group.arn
+    type             = "fixed-response"
+  }
+}
+
+resource "aws_lb_target_group" "target_group" {
+  name        = "my-target-group"
+  port        = var.port_http_8080
+  protocol    = var.protocol_http
+  target_type = "instance"
 
   health_check {
-    healthy_threshold   = var.healthy_threshold
-    unhealthy_threshold = var.unhealthy_threshold
-    target              = var.target
-    timeout             = var.timeout
-    interval            = var.interval
+    path = "/actuator/health"
   }
-
-  cross_zone_load_balancing = true
-  idle_timeout              = var.idle_timeout
-  tags = {
-    Name = "Elastic Load Balancer"
-  }
-
 }
+
+
+
+
+#resource "aws_elb" "elastic-load-balancer" {
+#  name            = var.elb_name
+#  subnets         = [aws_subnet.publicsubnet_1.id, aws_subnet.publicsubnet_2.id]
+#  security_groups = [aws_security_group.elb.id]
+#
+#  listener {
+#    instance_port     = var.port_http_8080
+#    instance_protocol = var.protocol_http
+#    lb_port           = var.port_http
+#    lb_protocol       = var.protocol_http
+#  }
+#
+#  health_check {
+#    healthy_threshold   = var.healthy_threshold
+#    unhealthy_threshold = var.unhealthy_threshold
+#    target              = var.target
+#    timeout             = var.timeout
+#    interval            = var.interval
+#  }
+#
+#  cross_zone_load_balancing = true
+#  idle_timeout              = var.idle_timeout
+#  tags = {
+#    Name = "Elastic Load Balancer"
+#  }
+#
+#}
 
 
 resource "aws_db_subnet_group" "db-subnet-group" {
