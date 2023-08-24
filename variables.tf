@@ -124,12 +124,6 @@ variable "port_http" {
 
 }
 
-variable "protocol_http" {
-  default     = "http"
-  description = "http Protocol"
-
-}
-
 
 variable "idle_timeout" {
   default     = 40
