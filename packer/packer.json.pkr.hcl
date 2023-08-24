@@ -9,7 +9,7 @@ packer {
 
 variable "ami_id" {
   type    = string
-  default = "ami-06878d265978313ca"
+  default = "ami-0261755bbcb8c4a84"
 }
 
 
