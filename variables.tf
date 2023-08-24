@@ -125,7 +125,7 @@ variable "port_http" {
 }
 
 variable "protocol_http" {
-  default     = "http"
+  default     = "HTTP"
   description = "http Protocol"
 
 }
