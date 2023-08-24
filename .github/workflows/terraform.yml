@@ -29,6 +29,12 @@ jobs:
           aws-region: us-east-1
     
 
+      - name: Init packer
+        run: packer init ../../terraform/terraform/packer/
+
+      - name: Packer validate
+        run: packer validate ../../terraform/terraform/packer/packer.json.pkr.hcl
+      
       - name: Building packer
         run: packer build ../../terraform/terraform/packer/packer.json.pkr.hcl
 
