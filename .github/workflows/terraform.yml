@@ -29,6 +29,9 @@ jobs:
           aws-region: us-east-1
     
 
+      - name: Set up Packer
+        uses: hashicorp/setup-packer@v2
+      
       - name: Init packer
         run: packer init ../../terraform/terraform/packer/
 

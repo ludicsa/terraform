@@ -1,12 +1,3 @@
-packer {
-  required_plugins {
-    amazon = {
-      source  = "github.com/hashicorp/amazon"
-      version = ">= 1.2.6"
-    }
-  }
-}
-
 variable "ami_id" {
   type    = string
   default = "ami-0261755bbcb8c4a84"
