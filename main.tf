@@ -326,7 +326,7 @@ resource "aws_lb" "application-load-balancer" {
 
 resource "aws_lb_listener" "alb_listener" {
   load_balancer_arn = aws_lb.application-load-balancer.arn
-  port              = var.port_http
+  port              = "HTTP"
   protocol          = var.protocol_http
 
   default_action {
