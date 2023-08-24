@@ -12,7 +12,7 @@ source "amazon-ebs" "java" {
   ssh_username  = "ubuntu"
   tags = {
     Env  = "dev"
-    Name = "Packer"
+    Name = "packer"
   }
 }
 
