@@ -267,7 +267,7 @@ resource "aws_autoscaling_group" "auto_scaling_group" {
   tag {
     propagate_at_launch = true
     key                 = "Name"
-    value               = "App Server"
+    value               = "App Server Java"
   }
 
 
@@ -327,7 +327,7 @@ resource "aws_lb" "application-load-balancer" {
 resource "aws_lb_listener" "alb_listener" {
   load_balancer_arn = aws_lb.application-load-balancer.arn
   port              = var.port_http
-  protocol          = var.protocol_http
+  protocol          = "HTTP"
 
   default_action {
     target_group_arn = aws_lb_target_group.target_group.arn
