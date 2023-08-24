@@ -10,10 +10,6 @@ source "amazon-ebs" "java" {
   region        = "us-east-1"
   source_ami    = "${var.ami_id}"
   ssh_username  = "ubuntu"
-  tags = {
-    Env  = "dev"
-    Name = "packer"
-  }
 }
 
 build {
