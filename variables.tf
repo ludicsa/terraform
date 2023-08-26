@@ -87,7 +87,7 @@ variable "instance_type" {
 
 }
 
-##ASG & ELB
+##ASG & ALB
 variable "desired_capacity" {
   default     = 2
   description = "Desired ASG capacity"
