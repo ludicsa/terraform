@@ -331,7 +331,7 @@ resource "aws_lb_listener" "alb_listener" {
 
   default_action {
     target_group_arn = aws_lb_target_group.target_group.arn
-    type             = "fixed-response"
+    type             = "forward"
 
     fixed_response {
       content_type = "text/plain"
