@@ -355,11 +355,11 @@ resource "aws_lb_target_group" "target_group" {
 
 
 resource "aws_db_subnet_group" "db-subnet-group" {
-  name       = var.db-subnet-group-name
+  name       = var.database.db_subnet_group_name
   subnet_ids = [aws_subnet.privatesubnet_3.id, aws_subnet.privatesubnet_4.id]
 
   tags = {
-    "Name" = var.db-subnet-group-name
+    "Name" = var.database.db_subnet_group_name
   }
 
 }
