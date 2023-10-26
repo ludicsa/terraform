@@ -368,13 +368,13 @@ resource "aws_db_instance" "postgres-db" {
   multi_az             = true
   db_subnet_group_name = aws_db_subnet_group.db-subnet-group.name
   allocated_storage    = 10
-  engine               = var.db-engine
-  engine_version       = var.db-engine-version
-  instance_class       = var.db-instance-class
-  db_name              = var.db-name
-  username             = var.db-username
-  port                 = var.db-port
-  password             = var.db-password
+  engine               = var.database.db_engine
+  engine_version       = var.database.db_engine_version
+  instance_class       = var.database.db_instance_class
+  db_name              = var.database.db_name
+  username             = var.database.db_username
+  port                 = var.database.db_port
+  password             = var.database.db_password
 
   vpc_security_group_ids = [aws_security_group.allow_http.id, aws_security_group.allow_ssh.id]
 }

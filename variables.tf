@@ -142,58 +142,28 @@ variable "port_http_8080" {
 
 }
 
-variable "db-subnet-group-name" {
-  type        = string
-  default     = "db-subnet-group"
-  description = ""
 
-}
+##DB
+variable "database" {
+  type = object({
+    db_subnet_group_name = string
+    db_engine_version = string
+    db_instance_class = string
+    db_username = string
+    db_password = string
+    db_port = number
+    db_engine = string
+    db_name = string
+  })
 
-variable "db-engine-version" {
-  type        = string
-  default     = "14.6"
-  description = ""
-
-}
-
-variable "db-instance-class" {
-  type        = string
-  default     = "db.t3.micro"
-  description = ""
-
-}
-
-
-variable "db-username" {
-  type        = string
-  default     = "root"
-  description = ""
-
-}
-
-variable "db-password" {
-  type        = string
-  default     = "root1234"
-  description = ""
-
-}
-
-variable "db-port" {
-  type    = number
-  default = 5432
-
-}
-
-variable "db-engine" {
-  type        = string
-  default     = "postgres"
-  description = ""
-
-}
-
-variable "db-name" {
-  type        = string
-  default     = "postgresdb"
-  description = ""
-
+  default = {
+    db_subnet_group_name = "db-subnet-group"
+    db_engine_version = "14.6"
+    db_instance_class = "db.t3.micro"
+    db_username = "root"
+    db_password = "root1234"
+    db_port = 5432
+    db_engine = "postgres"
+    db_name = "postgresdb"
+  }
 }
