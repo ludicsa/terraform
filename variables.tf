@@ -87,59 +87,41 @@ variable "instance_type" {
 
 }
 
-##ASG & ALB
-variable "desired_capacity" {
-  default     = 2
-  description = "Desired ASG capacity"
+##ALB
 
+variable "alb" {
+  type = object({
+    alb_port_http    = number
+    alb_idle_timeout = number
+    alb_name         = string
+    alb_port_http    = string
+  })
+
+  default = {
+    alb_port_http    = 80
+    alb_idle_timeout = 40
+    alb_name         = "ALB"
+    alb_port_http    = "8080"
+  }
 }
 
-variable "min_size" {
-  default     = 1
-  description = "Min size ASG capacity"
+#ASG
+variable "asg" {
+  type = object({
+    asg_desired_capacity          = number
+    asg_min_size                  = number
+    asg_max_size                  = number
+    asg_health_check_grace_period = number
+    asg_health_check_type         = string
+  })
 
-}
-
-variable "max_size" {
-  default     = 2
-  description = "Max size ASG capacity"
-
-}
-
-variable "health_check_grace_period" {
-  default     = 300
-  description = "Health check period"
-
-}
-
-variable "health_check_type" {
-  default     = "EC2"
-  description = "Health check type"
-
-}
-
-variable "port_http" {
-  default     = 80
-  description = "HTTP"
-
-}
-
-
-variable "idle_timeout" {
-  default     = 40
-  description = ""
-
-}
-
-variable "alb_name" {
-  default     = "ALB"
-  description = ""
-}
-
-variable "port_http_8080" {
-  default     = "8080"
-  description = ""
-
+  default = {
+    asg_desired_capacity          = 2
+    asg_min_size                  = 1
+    asg_max_size                  = 2
+    asg_health_check_grace_period = 300
+    asg_health_check_type         = "EC2"
+  }
 }
 
 
@@ -147,23 +129,23 @@ variable "port_http_8080" {
 variable "database" {
   type = object({
     db_subnet_group_name = string
-    db_engine_version = string
-    db_instance_class = string
-    db_username = string
-    db_password = string
-    db_port = number
-    db_engine = string
-    db_name = string
+    db_engine_version    = string
+    db_instance_class    = string
+    db_username          = string
+    db_password          = string
+    db_port              = number
+    db_engine            = string
+    db_name              = string
   })
 
   default = {
     db_subnet_group_name = "db-subnet-group"
-    db_engine_version = "14.6"
-    db_instance_class = "db.t3.micro"
-    db_username = "root"
-    db_password = "root1234"
-    db_port = 5432
-    db_engine = "postgres"
-    db_name = "postgresdb"
+    db_engine_version    = "14.6"
+    db_instance_class    = "db.t3.micro"
+    db_username          = "root"
+    db_password          = "root1234"
+    db_port              = 5432
+    db_engine            = "postgres"
+    db_name              = "postgresdb"
   }
 }

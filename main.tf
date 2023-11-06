@@ -258,11 +258,11 @@ resource "aws_launch_template" "ec2_config" {
 resource "aws_autoscaling_group" "auto_scaling_group" {
   name                      = "Auto Scaling Group"
   vpc_zone_identifier       = [aws_subnet.privatesubnet_1.id, aws_subnet.privatesubnet_2.id]
-  desired_capacity          = var.desired_capacity
-  min_size                  = var.min_size
-  max_size                  = var.max_size
-  health_check_grace_period = var.health_check_grace_period
-  health_check_type         = var.health_check_type
+  desired_capacity          = var.asg.asg_desired_capacity
+  min_size                  = var.asg.asg_min_size
+  max_size                  = var.asg.asg_max_size
+  health_check_grace_period = var.asg.health_check_grace_period
+  health_check_type         = var.asg.health_check_type
 
   tag {
     propagate_at_launch = true
@@ -315,7 +315,7 @@ data "aws_ami" "java-ami" {
 
 
 resource "aws_lb" "application-load-balancer" {
-  name            = var.alb_name
+  name            = var.alb.alb_name
   subnets         = [aws_subnet.publicsubnet_1.id, aws_subnet.publicsubnet_2.id]
   security_groups = [aws_security_group.alb.id]
 
@@ -326,7 +326,7 @@ resource "aws_lb" "application-load-balancer" {
 
 resource "aws_lb_listener" "alb_listener" {
   load_balancer_arn = aws_lb.application-load-balancer.arn
-  port              = var.port_http
+  port              = var.alb.alb_port
   protocol          = "HTTP"
 
   default_action {
@@ -343,10 +343,10 @@ resource "aws_lb_listener" "alb_listener" {
 
 resource "aws_lb_target_group" "target_group" {
   name        = "my-target-group"
-  port        = var.port_http_8080
+  port        = var.alb.alb_port_http
   protocol    = "HTTP"
   target_type = "instance"
-  vpc_id = aws_vpc.main.id
+  vpc_id      = aws_vpc.main.id
 
   health_check {
     path = "/actuator/health"
