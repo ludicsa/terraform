@@ -3,13 +3,13 @@ terraform {
     local = {
       source = "hashicorp/local"
     }
+    }
+    backend "s3" {
+      bucket = "s3-backend-project-ilegra"
+      key    = "terraform.tfstate"
+      region = "us-east-1"
+    }
   }
-  backend "s3" {
-    bucket = "s3-backend-project-ilegra"
-    key    = "terraform.tfstate"
-    region = "us-east-1"
-  }
-}
 
 provider "aws" {
   region = var.provider_region
